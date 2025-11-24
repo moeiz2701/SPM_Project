@@ -1,18 +1,14 @@
 {
   "builds": [
     {
-      "src": "api/agent_api.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb"
-      }
+      "src": "api/debug_api.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/agent_api.py"
+      "dest": "api/debug_api.py"
     }
-  ],
-  "installCommand": "pip install -r requirements.txt"
+  ]
 }
