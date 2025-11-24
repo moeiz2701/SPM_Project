@@ -431,8 +431,11 @@ async def shutdown_event():
 
 # ==================== Main Entry Point ====================
 
+# For Vercel serverless deployment
+handler = app
+
 if __name__ == "__main__":
-    """Run the API server"""
+    """Run the API server locally"""
     print("\n" + "=" * 60)
     print("Starting Loyalty AI Agent API Server")
     print("=" * 60)
