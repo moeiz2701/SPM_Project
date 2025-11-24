@@ -50,17 +50,9 @@ class AgentLogger:
         if logger.handlers:
             return logger
 
-        # Create logs directory if it doesn't exist
-        log_path = Path(log_file)
-        log_path.parent.mkdir(exist_ok=True)
-
-        # File handler
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setLevel(logging.INFO)
-
-        # Console handler
+        # Console handler (always works in serverless)
         console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setLevel(logging.WARNING)
+        console_handler.setLevel(logging.INFO)
 
         # Formatter
         formatter = logging.Formatter(
@@ -68,12 +60,26 @@ class AgentLogger:
             datefmt='%Y-%m-%d %H:%M:%S'
         )
 
-        file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
-
-        # Add handlers
-        logger.addHandler(file_handler)
         logger.addHandler(console_handler)
+
+        # Try to add file handler (works locally, fails in serverless)
+        try:
+            # Use /tmp for serverless environments (only writable directory)
+            import os
+            if os.path.exists('/tmp') and os.access('/tmp', os.W_OK):
+                log_file = '/tmp/agent.log'
+            
+            log_path = Path(log_file)
+            log_path.parent.mkdir(exist_ok=True, parents=True)
+            
+            file_handler = logging.FileHandler(log_file)
+            file_handler.setLevel(logging.INFO)
+            file_handler.setFormatter(formatter)
+            logger.addHandler(file_handler)
+        except (OSError, PermissionError) as e:
+            # Silently fail file logging in read-only environments
+            logger.info(f"File logging disabled (read-only filesystem): {e}")
 
         return logger
 

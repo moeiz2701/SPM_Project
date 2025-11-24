@@ -41,10 +41,21 @@ class MemoryManager:
         self.short_term_cache: OrderedDict[str, Dict[str, Any]] = OrderedDict()
         self.short_term_capacity = short_term_capacity
         
-        # Long-term memory setup
+        # Long-term memory setup (use /tmp for serverless environments)
+        import os
+        if os.path.exists('/tmp') and os.access('/tmp', os.W_OK):
+            memory_dir = '/tmp/memory'
+        
         self.memory_dir = Path(memory_dir)
-        self.memory_dir.mkdir(parents=True, exist_ok=True)
-        self.long_term_file_path = self.memory_dir / long_term_file
+        
+        try:
+            self.memory_dir.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            self.logger.warning(f"Cannot create memory directory (read-only filesystem): {e}")
+            # Use in-memory only mode
+            self.memory_dir = None
+        
+        self.long_term_file_path = self.memory_dir / long_term_file if self.memory_dir else None
         
         # Initialize long-term memory structure
         self.long_term_memory: Dict[str, List[Dict[str, Any]]] = {}
@@ -143,6 +154,11 @@ class MemoryManager:
     
     def _load_long_term_memory(self) -> None:
         """Load long-term memory from JSON file"""
+        if not self.long_term_file_path:
+            self.logger.info("Long-term memory disabled (read-only filesystem)")
+            self.long_term_memory = {}
+            return
+            
         try:
             if self.long_term_file_path.exists():
                 with open(self.long_term_file_path, 'r', encoding='utf-8') as f:
@@ -164,6 +180,9 @@ class MemoryManager:
     
     def _save_long_term_memory(self) -> None:
         """Save long-term memory to JSON file"""
+        if not self.long_term_file_path:
+            return  # Skip saving in read-only filesystem
+            
         try:
             with open(self.long_term_file_path, 'w', encoding='utf-8') as f:
                 json.dump(self.long_term_memory, f, indent=2, ensure_ascii=False)
