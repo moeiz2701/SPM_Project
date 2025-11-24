@@ -1,27 +1,12 @@
-# Core Dependencies
-numpy==1.26.4
-pandas==2.2.0
-scikit-learn==1.4.0
+# Minimal dependencies for Vercel deployment (under 250MB limit)
+# Heavy ML libraries excluded - not needed for API runtime
 
 # API Framework
 fastapi==0.104.1
-uvicorn[standard]==0.24.0
 pydantic==2.5.0
 
-# Data Handling
-faker==20.0.3
-
-# Memory & Storage
-redis==5.0.1
-
-# Testing
-pytest==7.4.3
-pytest-cov==4.1.0
-httpx==0.25.1
+# Data Handling (lightweight)
+python-dateutil==2.8.2
 
 # Logging
 python-json-logger==2.0.7
-
-# Utilities
-python-dateutil==2.8.2
-gunicorn==21.2.0

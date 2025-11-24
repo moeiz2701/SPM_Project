@@ -14,5 +14,5 @@
       "dest": "api/agent_api.py"
     }
   ],
-  "installCommand": "pip install -r requirements-vercel.txt"
+  "installCommand": "pip install -r requirements.txt"
 }
