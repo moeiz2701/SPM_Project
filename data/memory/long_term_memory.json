@@ -1,0 +1,110 @@
+{
+  "CUST_000": [
+    {
+      "customer_id": "CUST_000",
+      "recommendation": "Reward_0",
+      "retention": 0.85,
+      "timestamp": "2025-11-24T19:08:28.427318"
+    }
+  ],
+  "CUST_001": [
+    {
+      "customer_id": "CUST_001",
+      "recommendation": "Reward_1",
+      "retention": 0.9,
+      "timestamp": "2025-11-24T19:08:28.427318"
+    }
+  ],
+  "CUST_002": [
+    {
+      "customer_id": "CUST_002",
+      "recommendation": "Reward_2",
+      "retention": 0.95,
+      "timestamp": "2025-11-24T19:08:28.429322"
+    }
+  ],
+  "CUST000001": [
+    {
+      "customer_id": "CUST000001",
+      "segment": "Potential Loyalist",
+      "rfm_score": 39.73,
+      "churn_risk": "Low",
+      "predicted_retention": 0.61,
+      "recommended_reward": "loyalty_points",
+      "reward_details": {
+        "name": "1000 Loyalty Points",
+        "cost": 100,
+        "value": "1000 bonus points"
+      },
+      "confidence": 0.9,
+      "strategy": "Growth & Upsell",
+      "timestamp": "2025-11-24T19:34:00.398488"
+    },
+    {
+      "customer_id": "CUST000001",
+      "segment": "Potential Loyalist",
+      "rfm_score": 39.73,
+      "churn_risk": "Low",
+      "predicted_retention": 0.61,
+      "recommended_reward": "loyalty_points",
+      "reward_details": {
+        "name": "1000 Loyalty Points",
+        "cost": 100,
+        "value": "1000 bonus points"
+      },
+      "confidence": 0.9,
+      "strategy": "Growth & Upsell",
+      "timestamp": "2025-11-24T19:34:00.398488"
+    }
+  ],
+  "CUST000002": [
+    {
+      "customer_id": "CUST000002",
+      "segment": "Loyal Customer",
+      "rfm_score": 66.45,
+      "churn_risk": "Low",
+      "predicted_retention": 0.752,
+      "recommended_reward": "early_access",
+      "reward_details": {
+        "name": "Early Access to Sales",
+        "cost": 50,
+        "value": "24-hour early access"
+      },
+      "confidence": 0.9,
+      "strategy": "Engagement & Loyalty Reinforcement",
+      "timestamp": "2025-11-24T19:34:00.674883"
+    },
+    {
+      "customer_id": "CUST000002",
+      "segment": "Loyal Customer",
+      "rfm_score": 66.45,
+      "churn_risk": "Low",
+      "predicted_retention": 0.752,
+      "recommended_reward": "early_access",
+      "reward_details": {
+        "name": "Early Access to Sales",
+        "cost": 50,
+        "value": "24-hour early access"
+      },
+      "confidence": 0.9,
+      "strategy": "Engagement & Loyalty Reinforcement",
+      "timestamp": "2025-11-24T19:34:01.450583"
+    },
+    {
+      "customer_id": "CUST000002",
+      "segment": "Loyal Customer",
+      "rfm_score": 66.45,
+      "churn_risk": "Low",
+      "predicted_retention": 0.752,
+      "recommended_reward": "early_access",
+      "reward_details": {
+        "name": "Early Access to Sales",
+        "cost": 50,
+        "value": "24-hour early access"
+      },
+      "confidence": 0.9,
+      "strategy": "Engagement & Loyalty Reinforcement",
+      "timestamp": "2025-11-24T19:34:01.450583"
+    }
+  ]
+}
