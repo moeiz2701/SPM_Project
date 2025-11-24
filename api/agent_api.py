@@ -46,8 +46,26 @@ app.add_middleware(
 
 # Initialize components
 logger = get_logger(__name__)
-agent = LoyaltyAgent()
-memory = MemoryManager()
+
+# Get absolute paths for data files (works in serverless environment)
+base_dir = Path(__file__).parent.parent
+customers_file = str(base_dir / "data" / "customers.json")
+transactions_file = str(base_dir / "data" / "transactions.json")
+
+# Initialize agent with error handling for serverless environment
+try:
+    agent = LoyaltyAgent(customers_file=customers_file, transactions_file=transactions_file)
+    logger.info(f"Agent initialized successfully with {len(agent.customers)} customers")
+except Exception as e:
+    logger.error(f"Error initializing agent: {e}")
+    # Create minimal agent for health checks
+    agent = None
+
+try:
+    memory = MemoryManager()
+except Exception as e:
+    logger.error(f"Error initializing memory: {e}")
+    memory = None
 
 # Track API metrics
 api_start_time = datetime.now()
@@ -188,6 +206,13 @@ async def analyze_customer(request: AnalyzeRequest):
     global request_count, error_count
     request_count += 1
     
+    if not agent:
+        error_count += 1
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Agent is not initialized. Service temporarily unavailable."
+        )
+    
     try:
         logger.info(f"Analyzing customer: {request.customer_id}")
         
@@ -244,15 +269,18 @@ async def health_check():
         uptime_seconds = (datetime.now() - api_start_time).total_seconds()
         error_rate = (error_count / request_count * 100) if request_count > 0 else 0.0
         
+        customers_count = len(agent.customers) if agent else 0
+        transactions_count = len(agent.transactions) if agent else 0
+        
         return HealthResponse(
-            status="healthy",
+            status="healthy" if agent else "degraded",
             uptime_seconds=uptime_seconds,
             uptime_human=format_uptime(uptime_seconds),
             total_requests=request_count,
             total_errors=error_count,
             error_rate=round(error_rate, 2),
-            customers_loaded=len(agent.customers),
-            transactions_loaded=len(agent.transactions),
+            customers_loaded=customers_count,
+            transactions_loaded=transactions_count,
             timestamp=datetime.now().isoformat(),
             environment=os.getenv("ENVIRONMENT", "production")
         )
